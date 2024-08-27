@@ -8,18 +8,23 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   const { username, email, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 8);
-  console.log("i am role ", role);
-  
-  User.User.create({
-    username,
-    email,
-    password: hashedPassword,
-    role:role
-  }).then(user => {
-    res.status(201).send(user);
-  }).catch(err => {
-    res.status(500).send({ message: err.message });
-  });
+  User.User.findOne({ where: { email } }).then((user)=>{
+    if(!user){
+      User.User.create({
+        username,
+        email,
+        password: hashedPassword,
+        role:role
+      }).then(user => {
+        res.status(201).send(user);
+      }).catch(err => {
+        res.status(500).send({ message: err.message });
+      });
+    }else{
+      res.status(500).send({ message: err.message });
+    }
+  })
+ 
 });
 
 router.post('/login', async (req, res) => {
