@@ -1,3 +1,5 @@
+const { UniqueConstraintError } = require("sequelize");
+
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define('user', {
     username: {
@@ -6,7 +8,8 @@ module.exports = (sequelize, Sequelize) => {
     },
     email: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      UniqueConstraintError:true
     },
     password: {
       type: Sequelize.STRING,
